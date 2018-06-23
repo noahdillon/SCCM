@@ -1,9 +1,9 @@
 ﻿#########################################
 #                                       #
-# LAN, Power, and VPN Status v1.0.A     #
+# LAN, Power, VPN Check v1.0.A          #
 # Created by: Noah Dillon & Ben Tefend  #
 # Created on: 06/20/2018                #
-# Revised on: 06/21/2018                #
+# Revised on: 06/23/2018                #
 #                                       #######################################################
 #                                                                                             #
 # This script was created as a pre-check for Windows 10 Upgrades during an OSD task sequence. #
@@ -14,11 +14,11 @@
 # these executibles on your primary site server.                                              #
 #                                                                                             #
 # When you add this to a task sequence, you will create a CMD step and run the following      #
-# command (be sure to include your package source):                                           ###########################################################################################
-#                                                                                                                                                                                       #
-# ServiceUI.exe -process:TSProgressUI.exe %SYSTEMROOT%\System32\WindowsPowerShell\v1.0\powershell.exe -NoProfile -WindowStyle Hidden -ExecutionPolicy Bypass -File LANandPowerCheck.ps1 #
-#                                                                                                                                                                                       #
-# For reference:                                                                              ###########################################################################################
+# command (be sure to include your package source):                                           ##############################################################################################
+#                                                                                                                                                                                          #
+# ServiceUI.exe -process:TSProgressUI.exe %SYSTEMROOT%\System32\WindowsPowerShell\v1.0\powershell.exe -NoProfile -WindowStyle Hidden -ExecutionPolicy Bypass -File LAN_Power_VPN-Check.ps1 #
+#                                                                                                                                                                                          #
+# For reference:                                                                              ##############################################################################################
 # https://modalyitblog.wordpress.com/2016/10/03/powershell-gui-reboot-prompt/                 #
 #                                                                                             #
 # Use below command to gather list of network adapters:                                       #
