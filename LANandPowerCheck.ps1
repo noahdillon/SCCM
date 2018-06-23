@@ -7,7 +7,7 @@
 #                                       #######################################################
 #                                                                                             #
 # This script was created as a pre-check for Windows 10 Upgrades during an OSD task sequence. #
-# Our script references status: Up vs. Disconnected vs. Disabled.                              #
+# Our script references status: Up vs. Disconnected vs. Disabled.                             #
 #                                                                                             #
 # In order to to leverage windows forms / message boxes during a task sequence, you need to   #
 # add ServiceUI.exe and TSProgressUI.exe (both x86) into your package source. You can locate  #
@@ -73,7 +73,6 @@ Add-Type -AssemblyName System.Windows.Forms | Out-Null
 
 $warning = [System.Windows.Forms.MessageBox]::Show("If you are docked, please undock and connect both LAN and POWER to your computer directly. It's likely you'll need to restart the upgrade process after undocking. This will take a while. Hit OK to continue!","WINDOWS 10 UPGRADE PRE-CHECK",
 [System.Windows.Forms.MessageBoxButtons]::OK)
-#$warning.TopMost = $True
 
 #############################################################################
 # Check if user is connected to VPN. If connected, exit script with code 1. #
