@@ -1,9 +1,9 @@
 #########################################
 #                                       #
-# LAN, Power, VPN Check v1.0.A          #
+# LAN, Power, VPN Check v1.0.B          #
 # Created by: Noah Dillon & Ben Tefend  #
 # Created on: 06/20/2018                #
-# Revised on: 06/23/2018                #
+# Revised on: 07/26/2018                #
 #                                       #######################################################
 #                                                                                             #
 # This script was created as a pre-check for Windows 10 Upgrades during an OSD task sequence. #
