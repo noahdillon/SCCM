@@ -1,4 +1,4 @@
-﻿#########################################
+#########################################
 #                                       #
 # LAN, Power, VPN Check v1.0.A          #
 # Created by: Noah Dillon & Ben Tefend  #
@@ -23,7 +23,7 @@
 #                                                                                             #
 # Use below command to gather list of network adapters:                                       #
 #                                                                                             #
-# Get-NetAdapter | select Name, PhysicalMediaType, Status                                     #
+# Get-NetAdapter | select Name, PhysicalMediaType, Status, InterfaceDescription               #
 #                                                                                             #
 ###############################################################################################
 
@@ -74,15 +74,63 @@ Add-Type -AssemblyName System.Windows.Forms | Out-Null
 $warning = [System.Windows.Forms.MessageBox]::Show("If you are docked, please undock and connect both LAN and POWER to your computer directly. It's likely you'll need to restart the upgrade process after undocking. This will take a while. Hit OK to continue!","WINDOWS 10 UPGRADE PRE-CHECK",
 [System.Windows.Forms.MessageBoxButtons]::OK)
 
+###################################################################################################################
+# Check if device is Laptop. If true, continue running script, otherwise end script.                              #
+#                                                                                                                 #
+# http://www.techcrafters.com/scripts/windows-system-management/determine-whether-a-machine-is-laptop-or-not.html #
+###################################################################################################################
+
+Function Detect-Laptop {
+$isLaptop = $false
+#Check if the machine’s chasis type is 9.Laptop 10.Notebook 14.Sub-Notebook
+if(Get-WmiObject -Class win32_systemenclosure -ComputerName $env:COMPUTERNAME | Where-Object { $_.chassistypes -eq 9 -or $_.chassistypes -eq 10 -or $_.chassistypes -eq 14})
+{ $isLaptop = $true }
+#Show battery status -- if true then the machine is a laptop.
+if(Get-WmiObject -Class win32_battery -ComputerName $env:COMPUTERNAME)
+{ $isLaptop = $true }
+$isLaptop
+}
+If(Detect-Laptop) {
+}
+else { 
+Exit 0
+}
+
 #############################################################################
 # Check if user is connected to VPN. If connected, exit script with code 1. #
 #############################################################################
 
 function VPNCheck{
-$vpnadapter = Get-NetAdapter | Where-Object Name -EQ "Ethernet 2"
+$vpnadapter = Get-NetAdapter | Where-Object InterfaceDescription -like "Cisco*"
 
 if($vpnadapter.status -eq "Up"){
 [System.Windows.Forms.MessageBox]::Show("You are currently connected to VPN. Please disconnect, plug in both LAN and POWER to your computer directly, and restart the task sequence.", "VPN WARNING")
+Exit 1
+}
+}
+
+###############################################################################################
+# Check if user is connected to Dell DisplayLink Dock. If connected, exit script with code 1. #
+###############################################################################################
+
+function DellDockCheck{
+$delldockadapter = Get-NetAdapter | Where-Object InterfaceDescription -like "Dell*"
+
+if($delldockadapter.status -eq "Up"){
+[System.Windows.Forms.MessageBox]::Show("You are currently connected to a Dell docking station or adapter. Please disconnect, plug in both LAN and POWER to your computer directly, and restart the task sequence.", "DOCK WARNING")
+Exit 1
+}
+}
+
+###################################################################################################
+# Check if user is connected to ThinkPad DisplayLink Dock. If connected, exit script with code 1. #
+###################################################################################################
+
+function TPDockCheck{
+$tpdockadapter = Get-NetAdapter | Where-Object InterfaceDescription -like "ThinkPad*"
+
+if($tpdockadapter.status -eq "Up"){
+[System.Windows.Forms.MessageBox]::Show("You are currently connected to a ThinkPad docking station or adapter. Please disconnect, plug in both LAN and POWER to your computer directly, and restart the task sequence.", "DOCK WARNING")
 Exit 1
 }
 }
@@ -171,7 +219,7 @@ function CheckCable{
 Exit 0 
 }
 
-
-
+TPDockCheck -adapter $tpdockadapter
+DellDockCheck -adapter $delldockadapter
 VPNCheck -adapter $vpnadapter
 CheckCable -adapter $netadapter
